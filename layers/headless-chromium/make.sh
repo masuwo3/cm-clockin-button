@@ -15,8 +15,3 @@ if [ ! -f python/bin/chromedriver ]; then
     unzip chromedriver.zip -d python/bin/
     rm chromedriver.zip
 fi
-
-# make layer package
-if [ ! -f layer.zip ]; then
-    zip -r9 layer.zip python/
-fi
