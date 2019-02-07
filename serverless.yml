@@ -1,10 +1,20 @@
-service: cm-workin-btn 
+service: cm-clockin-btn 
 
 provider:
   name: aws
   runtime: python3.6
   region: ap-northeast-1
+  timeout: 300
   profile: cm-hirata.kei
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "secretsmanager:GetSecretValue"
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+      Resource: "arn:aws:s3:::cm-hiratakei-hogehoge*"
 
 package:
   exclude:
@@ -12,7 +22,7 @@ package:
 
 functions:
   clockin:
-    handler: handler.clockin_handler
+    handler: handler.handler
     layers:
       - {Ref: HeadlessDashchromiumLambdaLayer}
 
@@ -23,3 +33,5 @@ layers:
       - python3.6
     allowedAccounts:
       - '*'
+plugins:
+  - serverless-python-requirements
