@@ -14,7 +14,12 @@ provider:
     - Effect: "Allow"
       Action:
         - "s3:PutObject"
-      Resource: "arn:aws:s3:::cm-hiratakei-hogehoge*"
+      Resource: !Join [ "", [ !GetAtt SSBackup.Arn, "/*" ] ]
+
+resources:
+  Resources:
+    SSBackup:
+      Type: AWS::S3::Bucket
 
 package:
   exclude:
@@ -25,6 +30,8 @@ functions:
     handler: handler.handler
     layers:
       - {Ref: HeadlessDashchromiumLambdaLayer}
+    environment:
+      BACKUP_BUCKET: !Ref SSBackup
 
 layers:
   headless-chromium:

@@ -1,6 +1,7 @@
 from time import sleep
 from datetime import datetime
 import json
+import os
 
 import boto3
 from selenium import webdriver
@@ -35,11 +36,12 @@ def record(record_type):
         driver.save_screenshot(f"/tmp/{today}.png")
         driver.close()
 
+        bucket_name = os.environ["BACKUP_BUCKET"]
         s3 = boto3.resource("s3")
         s3.meta.client.upload_file(f"/tmp/{today}.png",
-                                   "cm-hiratakei-hogehoge",
+                                   bucket_name,
                                    f"{today}.png")
-        print("upload screenshot: s3://cm-hiratakei-hogehoge/{today}.png")
+        print(f"upload screenshot: s3://{bucket_name}/{today}.png")
         raise e
 
 
